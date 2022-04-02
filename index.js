@@ -1,11 +1,35 @@
-const express = require("express"); 
+require('dotenv').config()
+const express = require("express");
+const mongoose = require("mongoose");
+const Holiday = require("./models/Holiday")
+const HolidayController = require("./controllers/holidayController")
+
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT ?? 2000
+const MONGODB_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017/holidays"
+
+// Error / Disconnection
+mongoose.connection.on("error", (err) =>
+  console.log(err.message + " is Mongod not running?")
+);
+mongoose.connection.on("disconnected", () => console.log("mongo disconnected"));
+
+//...farther down the page
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+});
+mongoose.connection.once("open", () => {
+  console.log("connected to mongoose...");
+});
+
+app.use("/api/holidays", HolidayController)
+
 
 app.get("/", (req, res) => {
-    res.send("Welcome to Project 3 Backend!");
-});
+    res.send('Hi 2');
+})
 
-app.listen(port, () => {
-    console.log("Hello...");
-});
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+})
