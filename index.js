@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
-const Holiday = require("./models/Holiday")
 const HolidayController = require("./controllers/holidayController")
 
 const app = express();
